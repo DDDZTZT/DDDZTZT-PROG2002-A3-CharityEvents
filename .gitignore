@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output (Angular)
+dist/
+*/dist/
+
+# Environment / secrets (do not commit real passwords)
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Local scratch files (not part of the submission)
+_extract.py
+_A3Brief.txt
+
+# Not source code (keep out of the repo)
+*.mwb
+PROG2002*.pdf
+A3-任务总结与实施计划.md
