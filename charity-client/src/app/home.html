@@ -1,0 +1,22 @@
+<h1>Upcoming Events</h1>
+
+@if (loading()) {
+  <p>Loading events…</p>
+}
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+<div class="events">
+  @for (event of events(); track event.event_id) {
+    <a class="card" [routerLink]="['/event', event.event_id]">
+      <img [src]="event.image_url" [alt]="event.event_name" />
+      <div class="card-body">
+        <h3>{{ event.event_name }}</h3>
+        <p class="meta">{{ event.city }} · {{ event.event_date }}</p>
+        <p>{{ event.description }}</p>
+      </div>
+    </a>
+  }
+</div>

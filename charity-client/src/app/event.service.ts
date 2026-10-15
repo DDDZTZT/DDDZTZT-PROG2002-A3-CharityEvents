@@ -1,0 +1,84 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+
+// Base URL of the Express API. Change this when deploying to cPanel
+// (e.g. https://your-cpanel-domain/api).
+const API_BASE = 'http://localhost:3000/api';
+
+// A single registration row, as returned by the API.
+export interface Registration {
+  registration_id: number;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  tickets: number;
+  registration_date: string;
+  event_id: number;
+}
+
+// A charity event, as returned by the API. The API also attaches a
+// `registrations` array to the single-event endpoint.
+export interface CharityEvent {
+  event_id: number;
+  event_name: string;
+  description: string;
+  event_date: string;
+  start_time: string;
+  location_name: string;
+  address: string;
+  city: string;
+  ticket_price: string | number;
+  is_free: number;
+  status: string;
+  image_url: string;
+  goal_amount: string | number;
+  raised_amount: string | number;
+  organisations_org_id: number;
+  categories_category_id: number;
+  registrations?: Registration[];
+}
+
+export interface Category {
+  category_id: number;
+  category_name: string;
+  description: string;
+}
+
+// Single service that wraps every API call the client needs.
+@Injectable({ providedIn: 'root' })
+export class EventService {
+  private http = inject(HttpClient);
+
+  // Home page: active events in the future.
+  getEvents() {
+    return this.http.get<CharityEvent[]>(`${API_BASE}/events`);
+  }
+
+  getCategories() {
+    return this.http.get<Category[]>(`${API_BASE}/categories`);
+  }
+
+  // Search page: filters are passed as query parameters.
+  searchEvents(filters: { date?: string; location?: string; category?: string }) {
+    return this.http.get<CharityEvent[]>(`${API_BASE}/events/search`, { params: filters });
+  }
+
+  // Event detail page: one event plus its registrations (newest first).
+  getEvent(id: number) {
+    return this.http.get<CharityEvent>(`${API_BASE}/events/${id}`);
+  }
+
+  // Registration page: submit a new registration.
+  register(body: {
+    full_name: string;
+    email: string;
+    phone?: string;
+    tickets: number;
+    event_id: number;
+  }) {
+    return this.http.post<{ message: string; registration_id: number }>(
+      `${API_BASE}/registrations`,
+      body
+    );
+  }
+}

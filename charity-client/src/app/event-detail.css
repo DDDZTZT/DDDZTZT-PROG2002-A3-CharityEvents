@@ -1,0 +1,38 @@
+.detail img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.register-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.7rem 1.4rem;
+  background: #1f3a5f;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.register-btn:hover {
+  background: #2c4f7f;
+}
+
+.registrations {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: #fff;
+}
+
+.registrations th,
+.registrations td {
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.registrations th {
+  background: #f0f2f5;
+}

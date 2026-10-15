@@ -1,0 +1,46 @@
+<h1>Register for an Event</h1>
+
+@if (event(); as event) {
+  <div class="event-summary">
+    <h2>{{ event.event_name }}</h2>
+    <p>{{ event.event_date }} · {{ event.location_name }}, {{ event.city }}</p>
+    <p>Ticket price: {{ event.is_free ? 'Free' : '$' + event.ticket_price }}</p>
+  </div>
+}
+
+@if (loadError()) {
+  <p class="error">{{ loadError() }}</p>
+}
+
+@if (error) {
+  <p class="error">{{ error }}</p>
+}
+
+@if (message) {
+  <p class="success">{{ message }}</p>
+  <a [routerLink]="['/event', event()?.event_id]">Back to event</a>
+}
+
+@if (!message) {
+  <form class="register-form" (ngSubmit)="submit()">
+    <label>
+      Full name
+      <input type="text" name="fullName" [(ngModel)]="fullName" />
+    </label>
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" />
+    </label>
+    <label>
+      Phone (optional)
+      <input type="text" name="phone" [(ngModel)]="phone" />
+    </label>
+    <label>
+      Number of tickets
+      <input type="number" name="tickets" min="1" [(ngModel)]="tickets" />
+    </label>
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Submitting…' : 'Confirm Registration' }}
+    </button>
+  </form>
+}

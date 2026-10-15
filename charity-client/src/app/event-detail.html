@@ -1,0 +1,46 @@
+@if (loading()) {
+  <p>Loading…</p>
+}
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (event(); as event) {
+  <div class="detail">
+    <img [src]="event.image_url" [alt]="event.event_name" />
+    <h1>{{ event.event_name }}</h1>
+    <p><strong>Date:</strong> {{ event.event_date }} {{ event.start_time }}</p>
+    <p><strong>Location:</strong> {{ event.location_name }}, {{ event.address }}, {{ event.city }}</p>
+    <p><strong>Ticket:</strong> {{ event.is_free ? 'Free' : '$' + event.ticket_price }}</p>
+    <p>{{ event.description }}</p>
+
+    <a class="register-btn" [routerLink]="['/register', event.event_id]">Register</a>
+  </div>
+
+  <h2>Registrations</h2>
+  @if (event.registrations && event.registrations.length > 0) {
+    <table class="registrations">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Tickets</th>
+          <th>Purchased</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (reg of event.registrations; track reg.registration_id) {
+          <tr>
+            <td>{{ reg.full_name }}</td>
+            <td>{{ reg.email }}</td>
+            <td>{{ reg.tickets }}</td>
+            <td>{{ reg.registration_date }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>No registrations yet.</p>
+  }
+}
