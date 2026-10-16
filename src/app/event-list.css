@@ -1,0 +1,50 @@
+.toolbar {
+  display: flex;
+  gap: 0.8rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.list {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.list th,
+.list td {
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.list th {
+  background: #f0f2f5;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.status-active {
+  background: #e6f4ea;
+  color: #1e7a34;
+}
+
+.status-suspended {
+  background: #fdecea;
+  color: #b00020;
+}
+
+.status-past {
+  background: #eceff3;
+  color: #666;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}

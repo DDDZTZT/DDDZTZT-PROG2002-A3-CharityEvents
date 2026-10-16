@@ -1,0 +1,55 @@
+<h1>All Events</h1>
+
+<div class="toolbar">
+  <a class="btn" routerLink="/new">+ Add Event</a>
+  <button class="btn ghost" type="button" (click)="load()">Refresh</button>
+</div>
+
+@if (loading()) {
+  <p>Loading…</p>
+}
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (!loading()) {
+  <table class="list">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>City</th>
+        <th>Status</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (event of events(); track event.event_id) {
+        <tr>
+          <td>{{ event.event_id }}</td>
+          <td>{{ event.event_name }}</td>
+          <td>{{ event.event_date }}</td>
+          <td>{{ event.city }}</td>
+          <td>
+            <span class="status status-{{ event.status }}">{{ event.status }}</span>
+          </td>
+          <td>{{ event.is_free ? 'Free' : '$' + event.ticket_price }}</td>
+          <td class="actions">
+            <a class="btn small" [routerLink]="['/edit', event.event_id]">Edit</a>
+            <button
+              class="btn small danger"
+              type="button"
+              [disabled]="deletingId() === event.event_id"
+              (click)="deleteEvent(event)"
+            >
+              {{ deletingId() === event.event_id ? 'Deleting…' : 'Delete' }}
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

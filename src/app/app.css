@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: #222;
+  background: #f4f6f8;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #263a4a;
+  color: #fff;
+}
+
+.site-header .brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.site-header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+}
+
+.site-header nav a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.error {
+  color: #b00020;
+  background: #fdecea;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+}
+
+.success {
+  color: #1e7a34;
+  background: #e6f4ea;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  background: #2e6da4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  background: #3b7fc0;
+}
+
+.btn.ghost {
+  background: #fff;
+  color: #2e6da4;
+  border: 1px solid #2e6da4;
+}
+
+.btn.ghost:hover {
+  background: #f0f5fa;
+}
+
+.btn.small {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.btn.danger {
+  background: #c0392b;
+}
+
+.btn.danger:hover {
+  background: #d64541;
+}
