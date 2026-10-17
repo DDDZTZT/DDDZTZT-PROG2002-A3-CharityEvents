@@ -21,3 +21,8 @@ _A3Brief.txt
 *.mwb
 PROG2002*.pdf
 A3-任务总结与实施计划.md
+
+# Angular build cache
+.angular/
+# Local zip archives
+*.zip
