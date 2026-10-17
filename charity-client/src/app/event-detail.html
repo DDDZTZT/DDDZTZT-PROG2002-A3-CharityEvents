@@ -18,6 +18,30 @@
     <a class="register-btn" [routerLink]="['/register', event.event_id]">Register</a>
   </div>
 
+  @if (weather().length > 0) {
+    <div class="weather">
+      <h2>Weather Forecast</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Weather</th>
+            <th>Max / Min (°C)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (day of weather(); track day.date) {
+            <tr>
+              <td>{{ day.date }}</td>
+              <td>{{ day.text }}</td>
+              <td>{{ day.max }} / {{ day.min }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
   <h2>Registrations</h2>
   @if (event.registrations && event.registrations.length > 0) {
     <table class="registrations">

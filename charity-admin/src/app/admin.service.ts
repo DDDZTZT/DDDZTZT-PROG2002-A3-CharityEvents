@@ -23,6 +23,8 @@ export interface CharityEvent {
   location_name: string;
   address: string;
   city: string;
+  latitude: string | number | null;
+  longitude: string | number | null;
   ticket_price: string | number;
   is_free: number;
   status: string;

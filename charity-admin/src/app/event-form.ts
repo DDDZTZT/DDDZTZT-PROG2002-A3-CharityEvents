@@ -28,6 +28,8 @@ export class EventForm {
   location_name = '';
   address = '';
   city = '';
+  latitude: number | null = null;
+  longitude: number | null = null;
   ticket_price: number = 0;
   is_free = false;
   status = 'active';
@@ -75,6 +77,8 @@ export class EventForm {
     this.location_name = event.location_name || '';
     this.address = event.address || '';
     this.city = event.city || '';
+    this.latitude = event.latitude != null ? Number(event.latitude) : null;
+    this.longitude = event.longitude != null ? Number(event.longitude) : null;
     this.ticket_price = Number(event.ticket_price) || 0;
     this.is_free = !!event.is_free;
     this.status = event.status || 'active';
@@ -107,6 +111,8 @@ export class EventForm {
       location_name: this.location_name,
       address: this.address,
       city: this.city,
+      latitude: this.latitude,
+      longitude: this.longitude,
       ticket_price: this.ticket_price,
       is_free: this.is_free ? 1 : 0,
       status: this.status,

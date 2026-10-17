@@ -27,6 +27,8 @@ export interface CharityEvent {
   location_name: string;
   address: string;
   city: string;
+  latitude: string | number | null;
+  longitude: string | number | null;
   ticket_price: string | number;
   is_free: number;
   status: string;
@@ -42,6 +44,16 @@ export interface Category {
   category_id: number;
   category_name: string;
   description: string;
+}
+
+// Shape of the Open-Meteo forecast response (the part we use).
+export interface OpenMeteoResponse {
+  daily: {
+    time: string[];
+    weather_code: number[];
+    temperature_2m_max: number[];
+    temperature_2m_min: number[];
+  };
 }
 
 // Single service that wraps every API call the client needs.
@@ -66,6 +78,17 @@ export class EventService {
   // Event detail page: one event plus its registrations (newest first).
   getEvent(id: number) {
     return this.http.get<CharityEvent>(`${API_BASE}/events/${id}`);
+  }
+
+  // Weather forecast for an event location (external Open-Meteo API).
+  getWeather(latitude: number, longitude: number) {
+    const url =
+      'https://api.open-meteo.com/v1/forecast' +
+      '?latitude=' + latitude +
+      '&longitude=' + longitude +
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min' +
+      '&timezone=Australia%2FSydney';
+    return this.http.get<OpenMeteoResponse>(url);
   }
 
   // Registration page: submit a new registration.

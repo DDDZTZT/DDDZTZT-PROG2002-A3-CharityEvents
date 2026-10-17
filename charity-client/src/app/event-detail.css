@@ -36,3 +36,24 @@
 .registrations th {
   background: #f0f2f5;
 }
+
+.weather {
+  margin-top: 1.5rem;
+}
+
+.weather table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.weather th,
+.weather td {
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.weather th {
+  background: #f0f2f5;
+}
