@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
-// Base URL of the Express API. Change this when deploying to cPanel.
-const API_BASE = 'http://localhost:3000/api';
+// Base URL of the Express API.
+// Locally it points to the dev server; on cPanel it points to the deployed API.
+const API_BASE =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000/api'
+    : 'https://24832012.it.scu.edu.au/api';
 
 export interface Registration {
   registration_id: number;

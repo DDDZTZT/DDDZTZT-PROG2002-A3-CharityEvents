@@ -26,7 +26,7 @@ app.get('/api/events', (req, res) => {
   db.query(sql, (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     res.json(results);
   });
@@ -38,7 +38,7 @@ app.get('/api/categories', (req, res) => {
   db.query("SELECT * FROM categories", (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     res.json(results);
   });
@@ -50,7 +50,7 @@ app.get('/api/organisations', (req, res) => {
   db.query("SELECT * FROM organisations", (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     res.json(results);
   });
@@ -89,7 +89,7 @@ app.get('/api/events/search', (req, res) => {
     db.query(sql, params, (err, results) => {
         if (err) {
             console.error(err);
-            return res.status(500).json({ error: 'Database query failed' });
+            return res.status(500).json({ error: 'Database query failed: ' + err.message });
         }
         res.json(results);
     });
@@ -105,7 +105,7 @@ app.get('/api/events/:id', (req, res) => {
   db.query("SELECT * FROM events WHERE event_id = ?", [id], (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     if (results.length === 0) {
       return res.status(404).json({ error: 'Event not found' });
@@ -119,7 +119,7 @@ app.get('/api/events/:id', (req, res) => {
       (err, registrations) => {
         if (err) {
           console.error(err);
-          return res.status(500).json({ error: 'Database query failed' });
+          return res.status(500).json({ error: 'Database query failed: ' + err.message });
         }
         res.json({ ...event, registrations: registrations });
       }
@@ -151,7 +151,7 @@ app.post('/api/events', (req, res) => {
   db.query(sql, params, (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     res.status(201).json({ message: 'Event created', event_id: result.insertId });
   });
@@ -182,7 +182,7 @@ app.put('/api/events/:id', (req, res) => {
   db.query(sql, params, (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Event not found' });
@@ -200,7 +200,7 @@ app.delete('/api/events/:id', (req, res) => {
   db.query("SELECT COUNT(*) AS cnt FROM registrations WHERE event_id = ?", [id], (err, rows) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
 
     if (rows[0].cnt > 0) {
@@ -210,7 +210,7 @@ app.delete('/api/events/:id', (req, res) => {
     db.query("DELETE FROM events WHERE event_id = ?", [id], (err, result) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Database query failed' });
+        return res.status(500).json({ error: 'Database query failed: ' + err.message });
       }
       if (result.affectedRows === 0) {
         return res.status(404).json({ error: 'Event not found' });
@@ -240,12 +240,15 @@ app.post('/api/registrations', (req, res) => {
         return res.status(409).json({ error: 'You have already registered for this event' });
       }
       console.error(err);
-      return res.status(500).json({ error: 'Database query failed' });
+      return res.status(500).json({ error: 'Database query failed: ' + err.message });
     }
     res.status(201).json({ message: 'Registration created', registration_id: result.insertId });
   });
 });
 
-app.listen(3000, () => {
-  console.log('API server running on http://localhost:3000');
+// On cPanel, Passenger provides the port through process.env.PORT.
+// Locally it falls back to 3000.
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log('API server running on port ' + PORT);
 });
