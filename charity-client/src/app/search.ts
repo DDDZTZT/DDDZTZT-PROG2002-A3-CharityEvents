@@ -14,13 +14,14 @@ export class Search {
 
   categories = signal<Category[]>([]);
 
-  date = '';
-  location = '';
-  category = '';
+  // Signals so async search results update the view (zoneless app).
+  date = signal('');
+  location = signal('');
+  category = signal('');
 
-  results: CharityEvent[] = [];
-  searched = false;
-  message = '';
+  results = signal<CharityEvent[]>([]);
+  searched = signal(false);
+  message = signal('');
 
   constructor() {
     this.eventService.getCategories().subscribe({
@@ -30,34 +31,34 @@ export class Search {
   }
 
   search() {
-    if (!this.date && !this.location && !this.category) {
-      this.message = 'Please select at least one filter.';
+    if (!this.date() && !this.location() && !this.category()) {
+      this.message.set('Please select at least one filter.');
       return;
     }
-    this.message = '';
+    this.message.set('');
 
     const filters: { date?: string; location?: string; category?: string } = {};
-    if (this.date) filters.date = this.date;
-    if (this.location) filters.location = this.location;
-    if (this.category) filters.category = this.category;
+    if (this.date()) filters.date = this.date();
+    if (this.location()) filters.location = this.location();
+    if (this.category()) filters.category = this.category();
 
     this.eventService.searchEvents(filters).subscribe({
       next: (list) => {
-        this.results = list;
-        this.searched = true;
+        this.results.set(list);
+        this.searched.set(true);
       },
       error: () => {
-        this.message = 'Search failed. Please try again.';
+        this.message.set('Search failed. Please try again.');
       },
     });
   }
 
   clear() {
-    this.date = '';
-    this.location = '';
-    this.category = '';
-    this.results = [];
-    this.searched = false;
-    this.message = '';
+    this.date.set('');
+    this.location.set('');
+    this.category.set('');
+    this.results.set([]);
+    this.searched.set(false);
+    this.message.set('');
   }
 }

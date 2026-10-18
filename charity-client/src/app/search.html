@@ -24,15 +24,15 @@
   </div>
 </form>
 
-@if (message) {
-  <p class="error">{{ message }}</p>
+@if (message()) {
+  <p class="error">{{ message() }}</p>
 }
 
-@if (searched) {
-  <h2>Results ({{ results.length }})</h2>
-  @if (results.length > 0) {
+@if (searched()) {
+  <h2>Results ({{ results().length }})</h2>
+  @if (results().length > 0) {
     <div class="events">
-      @for (event of results; track event.event_id) {
+      @for (event of results(); track event.event_id) {
         <a class="card" [routerLink]="['/event', event.event_id]">
           <img [src]="event.image_url" [alt]="event.event_name" />
           <h3>{{ event.event_name }}</h3>

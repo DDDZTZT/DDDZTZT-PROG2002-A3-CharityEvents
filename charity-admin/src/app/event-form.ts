@@ -20,28 +20,28 @@ export class EventForm {
   organisations = signal<Organisation[]>([]);
   event = signal<CharityEvent | null>(null);
 
-  // Form fields (plain properties, simplest with ngModel).
-  event_name = '';
-  description = '';
-  event_date = '';
-  start_time = '';
-  location_name = '';
-  address = '';
-  city = '';
-  latitude: number | null = null;
-  longitude: number | null = null;
-  ticket_price: number = 0;
-  is_free = false;
-  status = 'active';
-  image_url = '';
-  goal_amount: number = 0;
-  raised_amount: number = 0;
-  organisations_org_id: number | null = null;
-  categories_category_id: number | null = null;
+  // Signals so the form re-renders after async load / save (zoneless app).
+  event_name = signal('');
+  description = signal('');
+  event_date = signal('');
+  start_time = signal('');
+  location_name = signal('');
+  address = signal('');
+  city = signal('');
+  latitude = signal<number | null>(null);
+  longitude = signal<number | null>(null);
+  ticket_price = signal(0);
+  is_free = signal(false);
+  status = signal('active');
+  image_url = signal('');
+  goal_amount = signal(0);
+  raised_amount = signal(0);
+  organisations_org_id = signal<number | null>(null);
+  categories_category_id = signal<number | null>(null);
 
-  submitting = false;
-  message = '';
-  error = '';
+  submitting = signal(false);
+  message = signal('');
+  error = signal('');
 
   constructor() {
     // Dropdown data.
@@ -64,63 +64,63 @@ export class EventForm {
           this.event.set(event);
           this.fillForm(event);
         },
-        error: () => (this.error = 'Failed to load this event.'),
+        error: () => this.error.set('Failed to load this event.'),
       });
     }
   }
 
   fillForm(event: CharityEvent) {
-    this.event_name = event.event_name;
-    this.description = event.description || '';
-    this.event_date = event.event_date || '';
-    this.start_time = event.start_time || '';
-    this.location_name = event.location_name || '';
-    this.address = event.address || '';
-    this.city = event.city || '';
-    this.latitude = event.latitude != null ? Number(event.latitude) : null;
-    this.longitude = event.longitude != null ? Number(event.longitude) : null;
-    this.ticket_price = Number(event.ticket_price) || 0;
-    this.is_free = !!event.is_free;
-    this.status = event.status || 'active';
-    this.image_url = event.image_url || '';
-    this.goal_amount = Number(event.goal_amount) || 0;
-    this.raised_amount = Number(event.raised_amount) || 0;
-    this.organisations_org_id = event.organisations_org_id;
-    this.categories_category_id = event.categories_category_id;
+    this.event_name.set(event.event_name);
+    this.description.set(event.description || '');
+    this.event_date.set(event.event_date || '');
+    this.start_time.set(event.start_time || '');
+    this.location_name.set(event.location_name || '');
+    this.address.set(event.address || '');
+    this.city.set(event.city || '');
+    this.latitude.set(event.latitude != null ? Number(event.latitude) : null);
+    this.longitude.set(event.longitude != null ? Number(event.longitude) : null);
+    this.ticket_price.set(Number(event.ticket_price) || 0);
+    this.is_free.set(!!event.is_free);
+    this.status.set(event.status || 'active');
+    this.image_url.set(event.image_url || '');
+    this.goal_amount.set(Number(event.goal_amount) || 0);
+    this.raised_amount.set(Number(event.raised_amount) || 0);
+    this.organisations_org_id.set(event.organisations_org_id);
+    this.categories_category_id.set(event.categories_category_id);
   }
 
   submit() {
     if (
-      !this.event_name ||
-      !this.event_date ||
-      !this.organisations_org_id ||
-      !this.categories_category_id
+      !this.event_name() ||
+      !this.event_date() ||
+      !this.organisations_org_id() ||
+      !this.categories_category_id()
     ) {
-      this.error = 'Please fill in name, date, organisation and category.';
+      this.error.set('Please fill in name, date, organisation and category.');
       return;
     }
 
-    this.submitting = true;
-    this.error = '';
+    this.submitting.set(true);
+    this.error.set('');
 
     const body = {
-      event_name: this.event_name,
-      description: this.description,
-      event_date: this.event_date,
-      start_time: this.start_time,
-      location_name: this.location_name,
-      address: this.address,
-      city: this.city,
-      latitude: this.latitude,
-      longitude: this.longitude,
-      ticket_price: this.ticket_price,
-      is_free: this.is_free ? 1 : 0,
-      status: this.status,
-      image_url: this.image_url,
-      goal_amount: this.goal_amount,
-      raised_amount: this.raised_amount,
-      organisations_org_id: this.organisations_org_id,
-      categories_category_id: this.categories_category_id,
+      event_name: this.event_name(),
+      description: this.description(),
+      event_date: this.event_date(),
+      start_time: this.start_time(),
+      location_name: this.location_name(),
+      address: this.address(),
+      city: this.city(),
+      latitude: this.latitude(),
+      longitude: this.longitude(),
+      ticket_price: this.ticket_price(),
+      is_free: this.is_free() ? 1 : 0,
+      status: this.status(),
+      image_url: this.image_url(),
+      goal_amount: this.goal_amount(),
+      raised_amount: this.raised_amount(),
+      organisations_org_id: this.organisations_org_id(),
+      categories_category_id: this.categories_category_id(),
     };
 
     const request = this.isEdit
@@ -129,12 +129,14 @@ export class EventForm {
 
     request.subscribe({
       next: () => {
-        this.submitting = false;
-        this.message = this.isEdit ? 'Event updated successfully.' : 'Event created successfully.';
+        this.submitting.set(false);
+        this.message.set(
+          this.isEdit ? 'Event updated successfully.' : 'Event created successfully.'
+        );
       },
       error: () => {
-        this.submitting = false;
-        this.error = 'Save failed. Please check the fields and try again.';
+        this.submitting.set(false);
+        this.error.set('Save failed. Please check the fields and try again.');
       },
     });
   }

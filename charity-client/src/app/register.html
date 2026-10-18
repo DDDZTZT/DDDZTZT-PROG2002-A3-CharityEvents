@@ -12,16 +12,16 @@
   <p class="error">{{ loadError() }}</p>
 }
 
-@if (error) {
-  <p class="error">{{ error }}</p>
+@if (error()) {
+  <p class="error">{{ error() }}</p>
 }
 
-@if (message) {
-  <p class="success">{{ message }}</p>
+@if (message()) {
+  <p class="success">{{ message() }}</p>
   <a [routerLink]="['/event', event()?.event_id]">Back to event</a>
 }
 
-@if (!message) {
+@if (!message()) {
   <form class="register-form" (ngSubmit)="submit()">
     <label>
       Full name
@@ -39,8 +39,8 @@
       Number of tickets
       <input type="number" name="tickets" min="1" [(ngModel)]="tickets" />
     </label>
-    <button type="submit" [disabled]="submitting">
-      {{ submitting ? 'Submitting…' : 'Confirm Registration' }}
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Submitting…' : 'Confirm Registration' }}
     </button>
   </form>
 }

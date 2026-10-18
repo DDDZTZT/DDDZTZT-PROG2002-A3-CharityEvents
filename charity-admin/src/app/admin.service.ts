@@ -76,11 +76,11 @@ export class AdminService {
     return this.http.get<Organisation[]>(`${API_BASE}/organisations`);
   }
 
-  createEvent(body: Partial<CharityEvent>) {
+  createEvent(body: any) {
     return this.http.post<{ message: string; event_id: number }>(`${API_BASE}/events`, body);
   }
 
-  updateEvent(id: number, body: Partial<CharityEvent>) {
+  updateEvent(id: number, body: any) {
     return this.http.put<{ message: string }>(`${API_BASE}/events/${id}`, body);
   }
 

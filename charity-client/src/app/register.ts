@@ -16,15 +16,16 @@ export class Register {
   event = signal<CharityEvent | null>(null);
   loadError = signal('');
 
-  // Form fields use plain properties (simplest with ngModel).
-  fullName = '';
-  email = '';
-  phone = '';
-  tickets = 1;
+  // The app runs in zoneless mode, so state changed inside async HTTP
+  // callbacks MUST be a signal for the view to update.
+  fullName = signal('');
+  email = signal('');
+  phone = signal('');
+  tickets = signal(1);
 
-  submitting = false;
-  message = '';
-  error = '';
+  submitting = signal(false);
+  message = signal('');
+  error = signal('');
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -35,42 +36,43 @@ export class Register {
   }
 
   submit() {
-    if (!this.fullName.trim() || !this.email.trim()) {
-      this.error = 'Please enter your name and email.';
+    if (!this.fullName().trim() || !this.email().trim()) {
+      this.error.set('Please enter your name and email.');
       return;
     }
-    if (this.tickets < 1) {
-      this.error = 'Number of tickets must be at least 1.';
+    if (this.tickets() < 1) {
+      this.error.set('Number of tickets must be at least 1.');
       return;
     }
     const eventId = this.event()?.event_id;
     if (!eventId) {
-      this.error = 'Event has not loaded yet.';
+      this.error.set('Event has not loaded yet.');
       return;
     }
 
-    this.submitting = true;
-    this.error = '';
+    this.submitting.set(true);
+    this.error.set('');
     this.eventService
       .register({
-        full_name: this.fullName.trim(),
-        email: this.email.trim(),
-        phone: this.phone.trim(),
-        tickets: this.tickets,
+        full_name: this.fullName().trim(),
+        email: this.email().trim(),
+        phone: this.phone().trim(),
+        tickets: this.tickets(),
         event_id: eventId,
       })
       .subscribe({
         next: (res) => {
-          this.submitting = false;
-          this.message =
-            'Registration successful! Your reference number is #' + res.registration_id + '.';
+          this.submitting.set(false);
+          this.message.set(
+            'Registration successful! Your reference number is #' + res.registration_id + '.'
+          );
         },
         error: (err) => {
-          this.submitting = false;
+          this.submitting.set(false);
           if (err.status === 409) {
-            this.error = 'You have already registered for this event.';
+            this.error.set('You have already registered for this event.');
           } else {
-            this.error = 'Registration failed. Please try again.';
+            this.error.set('Registration failed. Please try again.');
           }
         },
       });
